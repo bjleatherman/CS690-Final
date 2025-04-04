@@ -37,6 +37,11 @@ public class MaintenanceEvent : Event
         this.Cost = cost;
     }
 
+    public string PackToCsv()
+    {
+        return string.Join(',', EventDateTime, MaintenanceType, Odometer, Cost);
+    }
+
     public static MaintenanceEvent UnpackCsvLine (string csvLine)
     {
         string[] data = csvLine.Split(',');
@@ -67,7 +72,11 @@ public class RefuelEvent : MaintenanceEvent
         : base(eventDateTime, "Refuel", odometer, cost)
     {
         this.FuelAdded = fuelAdded;
-
+    }
+    
+    public new string PackToCsv()
+    {
+        return string.Join(',', EventDateTime, FuelAdded, Odometer, Cost);
     }
 
     public new static RefuelEvent UnpackCsvLine(string csvLine)
@@ -106,6 +115,11 @@ public class ReminderEvent : Event
         ReminderText = reminderText;
         ReminderTime = reminderTime;
         IsSilenced = isSilenced;
+    }
+
+    public string PackToCsv()
+    {
+        return string.Join(',', EventDateTime, ReminderText, ReminderTime, IsSilenced);
     }
 
     public static ReminderEvent UnpackCsvLine(string csvLine)

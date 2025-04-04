@@ -2,11 +2,11 @@ namespace Final;
 
 using System.IO;
 
-public class FileSaver
+public class FileManager
 {
     string fileName;
 
-    public FileSaver(string fileName)
+    public FileManager(string fileName)
     {
         this.fileName = fileName;
         if(!File.Exists(this.fileName))
