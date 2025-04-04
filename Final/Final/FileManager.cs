@@ -1,33 +1,36 @@
 namespace Final;
 
 using System.IO;
+using System.Collections.Generic;
 
 public class FileManager
 {
-    string fileName;
+    string FileName;
 
     public FileManager(string fileName)
     {
-        this.fileName = fileName;
-        if(!File.Exists(this.fileName))
+        FileName = fileName;
+        if(!File.Exists(FileName))
         {
-            File.Create(this.fileName).Close();
+            File.Create(FileName).Close();
         }
+    }
+
+    public List<T> GetData<T>(Func<string, T> unpackCsv)
+    {
+        var list = new List<T>();
+
+        foreach (string line in File.ReadLines(FileName))
+        {
+            list.Add(unpackCsv(line));
+        }
+
+        return list;
     }
 
     public void AppendLine(string line)
     {
-        File.AppendAllText(this.fileName, line+Environment.NewLine);
+        File.AppendAllText(FileName, line + Environment.NewLine);
     }
 
-    // public void AppendData(PassengerData data)
-    // {
-    //     File.AppendAllText(this.fileName,
-    //         data.Driver+":"
-    //         +data.Loop+":"
-    //         +data.Stop+":"
-    //         +data.Boarded
-    //         +Environment.NewLine
-    //     );
-    // }
 }
