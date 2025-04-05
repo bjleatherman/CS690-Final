@@ -3,6 +3,9 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+# Text files used for data storage
+*.txt
+
 # dotenv files
 .env
 
