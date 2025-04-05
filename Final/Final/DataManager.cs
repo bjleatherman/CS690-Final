@@ -4,11 +4,6 @@ namespace Final;
 
 public class DataManager
 {
-
-    private readonly string _refuelFilePath = "refuel-data.txt";
-    private readonly string _maintenanceFilePath = "maintenance-data.txt";
-    private readonly string _reminderFilePath = "reminder-data.txt";
-
     private readonly FileManager _refuelFile;
     private readonly FileManager _maintenanceFile;
     private readonly FileManager _reminderFile;
@@ -17,11 +12,11 @@ public class DataManager
     private List<MaintenanceEvent> MaintenanceEvents { get; }
     private List<ReminderEvent> ReminderEvents { get; }
 
-    public DataManager()
+    public DataManager(string refuelFilePath, string maintenanceFilePath, string reminderFilePath)
     {
-         _refuelFile = new FileManager(_refuelFilePath);
-         _maintenanceFile = new FileManager(_maintenanceFilePath);
-         _reminderFile = new FileManager(_reminderFilePath);
+         _refuelFile = new FileManager(refuelFilePath);
+         _maintenanceFile = new FileManager(maintenanceFilePath);
+         _reminderFile = new FileManager(reminderFilePath);
 
         RefuelEvents = _refuelFile.GetData(RefuelEvent.UnpackCsvLine);
         MaintenanceEvents = _maintenanceFile.GetData(MaintenanceEvent.UnpackCsvLine);
@@ -36,14 +31,14 @@ public class DataManager
     }
 
     // Add Events
-    public void AddEvent<T>(List<T> events, T newEvent) where T : Event
+    private void AddEvent<T>(List<T> events, T newEvent) where T : Event
     {
         events.Add(newEvent);
         SynchronizeData();
     }
 
     // Delete Events
-    public void DeleteEvent<T>(List<T> events, Guid id) where T : Event
+    private void DeleteEvent<T>(List<T> events, Guid id) where T : Event
     {
         var eventToDelete = events.FirstOrDefault(e => e.Id == id);
 
@@ -63,6 +58,11 @@ public class DataManager
     public void DeleteRefuelEvent(Guid id) 
     {
         DeleteEvent(RefuelEvents, id);
+    }
+
+    public IEnumerable<RefuelEvent> GetRefuelEvents()
+    {
+        return RefuelEvents.AsReadOnly();
     }
 
     // Maintenance Events
