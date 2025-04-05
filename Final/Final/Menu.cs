@@ -2,6 +2,7 @@ namespace Final;
 
 using Spectre.Console;
 using Spectre.Console.Cli;
+using Final.Domain;
 
 public class MenuSystem
 {

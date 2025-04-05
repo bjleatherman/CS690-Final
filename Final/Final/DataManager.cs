@@ -1,6 +1,6 @@
-using System.Diagnostics.Tracing;
-
 namespace Final;
+
+using Final.Domain;
 
 public class DataManager
 {

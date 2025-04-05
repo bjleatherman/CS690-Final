@@ -1,4 +1,4 @@
-namespace Final;
+namespace Final.Domain;
 
 public class Event : ICsvSerializable
 {
