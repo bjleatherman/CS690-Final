@@ -28,7 +28,17 @@ public class FileManager
         return list;
     }
 
-    public void AppendLine(string line)
+    public void ReplaceFileData<T>(List<T> data) where T : ICsvSerializable
+    {
+
+        File.Delete(FileName);
+        foreach (T item in data)
+        {
+            AppendLine(item.PackToCsv());
+        }
+    }
+
+    private void AppendLine(string line)
     {
         File.AppendAllText(FileName, line + Environment.NewLine);
     }

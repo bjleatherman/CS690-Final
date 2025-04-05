@@ -1,16 +1,29 @@
+using System.Data.Common;
+
 namespace Final;
 
-public class Event
+public class Event : ICsvSerializable
 {
     public DateTime EventDateTime;
+    public Guid Id;
 
     // Default ctor uses current datetime
-    public Event() : this(DateTime.Now) { }
+    public Event()
+    {
+        EventDateTime = DateTime.Now;
+        Id = new Guid();
+    }
 
     // Overload for events added from files
-    public Event(DateTime eventDateTime)
+    public Event(DateTime eventDateTime, Guid id)
     {
         EventDateTime = eventDateTime;
+        Id = id;
+    }
+
+    public string PackToCsv()
+    {
+        return string.Join(',', Convert.ToString(EventDateTime), Convert.ToString(Id));
     }
 }
 
@@ -23,23 +36,23 @@ public class MaintenanceEvent : Event
     // Ctor, event time = current time
     public MaintenanceEvent(string maintenanceType, double odometer, double cost)
     {
-        this.MaintenanceType = maintenanceType;
-        this.Odometer = odometer;
-        this.Cost = cost;
+        MaintenanceType = maintenanceType;
+        Odometer = odometer;
+        Cost = cost;
     }
 
     // Overload for event from file
-    public MaintenanceEvent(DateTime eventDateTime, string maintenanceType, double odometer, double cost)
-        : base(eventDateTime)
+    public MaintenanceEvent(DateTime eventDateTime, string maintenanceType, double odometer, double cost, Guid id)
+        : base(eventDateTime, id)
     {
-        this.MaintenanceType = maintenanceType;
-        this.Odometer = odometer;
-        this.Cost = cost;
+        MaintenanceType = maintenanceType;
+        Odometer = odometer;
+        Cost = cost;
     }
 
-    public string PackToCsv()
+    public new string PackToCsv()
     {
-        return string.Join(',', EventDateTime, MaintenanceType, Odometer, Cost);
+        return string.Join(',', EventDateTime, MaintenanceType, Odometer, Cost, Id);
     }
 
     public static MaintenanceEvent UnpackCsvLine (string csvLine)
@@ -50,8 +63,9 @@ public class MaintenanceEvent : Event
         string maintenanceType  = data[1];
         double odometer = double.Parse(data[2]);
         double cost = double.Parse(data[3]);
+        var id = Guid.Parse(data[4]);
 
-        return new MaintenanceEvent(eventDateTime, maintenanceType, odometer, cost);
+        return new MaintenanceEvent(eventDateTime, maintenanceType, odometer, cost, id);
     }
 }
 
@@ -68,15 +82,15 @@ public class RefuelEvent : MaintenanceEvent
     }
 
     // Overload for event from file
-    public RefuelEvent(DateTime eventDateTime, double fuelAdded, double odometer, double cost)
-        : base(eventDateTime, "Refuel", odometer, cost)
+    public RefuelEvent(DateTime eventDateTime, double fuelAdded, double odometer, double cost, Guid id)
+        : base(eventDateTime, "Refuel", odometer, cost, id)
     {
-        this.FuelAdded = fuelAdded;
+        FuelAdded = fuelAdded;
     }
     
     public new string PackToCsv()
     {
-        return string.Join(',', EventDateTime, FuelAdded, Odometer, Cost);
+        return string.Join(',', EventDateTime, FuelAdded, Odometer, Cost, Id);
     }
 
     public new static RefuelEvent UnpackCsvLine(string csvLine)
@@ -87,8 +101,9 @@ public class RefuelEvent : MaintenanceEvent
         double fuelAdded = double.Parse(data[1]);
         double odometer = double.Parse(data[2]);
         double cost = double.Parse(data[3]);
+        var id = Guid.Parse(data[4]);
 
-        return new RefuelEvent(eventDateTime, fuelAdded, odometer, cost);
+        return new RefuelEvent(eventDateTime, fuelAdded, odometer, cost, id);
     }
 }
 
@@ -109,17 +124,17 @@ public class ReminderEvent : Event
     }
     
     // Overload for event from file
-    public ReminderEvent(DateTime eventDateTime, string reminderText, DateTime reminderTime, bool isSilenced)
-        : base(eventDateTime)
+    public ReminderEvent(DateTime eventDateTime, string reminderText, DateTime reminderTime, bool isSilenced, Guid id)
+        : base(eventDateTime, id)
     {
         ReminderText = reminderText;
         ReminderTime = reminderTime;
         IsSilenced = isSilenced;
     }
 
-    public string PackToCsv()
+    public new string PackToCsv()
     {
-        return string.Join(',', EventDateTime, ReminderText, ReminderTime, IsSilenced);
+        return string.Join(',', EventDateTime, ReminderText, ReminderTime, IsSilenced, Id);
     }
 
     public static ReminderEvent UnpackCsvLine(string csvLine)
@@ -130,7 +145,13 @@ public class ReminderEvent : Event
         string reminderText = data[1];
         var reminderTime = DateTime.Parse(data[2]);
         bool isSilenced = bool.Parse(data[3]);
+        var id = Guid.Parse(data[4]);
 
-        return new ReminderEvent(eventDateTime, reminderText, reminderTime, isSilenced);
+        return new ReminderEvent(eventDateTime, reminderText, reminderTime, isSilenced, id);
+    }
+
+    public void TurnOffReminder()
+    {
+        IsSilenced = true;
     }
 }
