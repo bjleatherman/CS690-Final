@@ -99,7 +99,7 @@ public class MenuSystem
 
         foreach (var e in refuelEvents)
         {
-            title = $"{e.MaintenanceType}: Gallons: {e.FuelAdded}, Cost: {e.Cost}, Odometer: {e.Odometer} | {e.EventDateTime.ToString("h:mm M/d/yy")}";
+            title = $"{e.MaintenanceType}: Gallons: {e.FuelAdded},  Odometer: {e.Odometer}, Cost: {e.Cost} | {e.EventDateTime.ToString("h:mm M/d/yy")}";
 
             menuItem = new MenuItem(title);
 
@@ -132,15 +132,6 @@ public class MenuSystem
             promptText:"Enter New Fuel Amount: ",
             editAction: (newValue) => _dataManager.EditRefuelEvent(id, fuelAdded:newValue)
         ));
-              
-        menuItem.Children.Add(CreateRefuelEditSubMenuItem(
-            menuItem: menuItem,
-            id:id,
-            titlePrefix:"Edit Cost",
-            currentValue:e.Cost,
-            promptText:"Enter New Fuel Cost: ",
-            editAction: (newValue) => _dataManager.EditRefuelEvent(id, cost:newValue)
-        ));
    
         menuItem.Children.Add(CreateRefuelEditSubMenuItem(
             menuItem: menuItem,
@@ -150,6 +141,15 @@ public class MenuSystem
             promptText:"Enter New Odometer: ",
             editAction: (newValue) => _dataManager.EditRefuelEvent(id, odometer:newValue)
         ));        
+              
+        menuItem.Children.Add(CreateRefuelEditSubMenuItem(
+            menuItem: menuItem,
+            id:id,
+            titlePrefix:"Edit Cost",
+            currentValue:e.Cost,
+            promptText:"Enter New Fuel Cost: ",
+            editAction: (newValue) => _dataManager.EditRefuelEvent(id, cost:newValue)
+        ));
         
         menuItem.Children.Add(
             new MenuItem($"DELETE", () =>{

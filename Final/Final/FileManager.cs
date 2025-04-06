@@ -1,12 +1,15 @@
 namespace Final;
 
+using System;
 using System.IO;
 using System.Collections.Generic;
 using Final.Domain;
+using System.IO.Enumeration;
 
 public class FileManager
 {
     string FileName;
+    static readonly string _dataFolderPath = Path.Combine(AppContext.BaseDirectory, "data");
 
     public FileManager(string fileName)
     {
@@ -43,5 +46,14 @@ public class FileManager
     {
         File.AppendAllText(FileName, line + Environment.NewLine);
     }
+    
+    public static void CreateDataDirectory()
+    {
+        if (!Directory.Exists(_dataFolderPath)) { Directory.CreateDirectory(_dataFolderPath); }
+    }
 
+    public static string GetFullFileName(string fileName)
+    {
+        return Path.Combine(_dataFolderPath, fileName);
+    }
 }
