@@ -189,4 +189,12 @@ public class DataManager
         targetEvent.ToggleReminder();
         SynchronizeData();
     }
+
+    public List<ReminderEvent> GetOverDueReminders()
+    {
+        return [.. ReminderEvents.Where(
+            e => e.ReminderTime <= DateTime.Now &&
+            e.IsSilenced == false
+        )];
+    }
 }

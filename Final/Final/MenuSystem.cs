@@ -12,7 +12,7 @@ public class MenuSystem
     private readonly DataManager _dataManager;
 
     // Root Menu and Options
-    public readonly MenuItem RootMenu = new("Car History");
+    public readonly MenuItem RootMenu= new("Car History");
     private readonly MenuItem _refuelMenu = new("Refuel Options");
     private readonly MenuItem _maintenanceMenu = new("Maintenance Options");
     private readonly MenuItem _reminderMenu = new("Reminder Options");
@@ -342,7 +342,7 @@ public class MenuSystem
 
         foreach (var e in reminderEvents)
         {
-            title = $"{e.ReminderText} | Alarm Time: {e.ReminderTime}, Is Silenced: {e.IsSilenced} | Time Alarm was Set: {e.EventDateTime.ToString("h:mm M/d/yy")}";
+            title = $"{e.ReminderText} | Alarm Time: {e.ReminderTime}, Will Ring: {!e.IsSilenced} | Time Alarm was Set: {e.EventDateTime.ToString("h:mm M/d/yy")}";
 
             menuItem = new MenuItem(title);
 

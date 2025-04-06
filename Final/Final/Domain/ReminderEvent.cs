@@ -32,7 +32,7 @@ public class ReminderEvent : Event
 
     public static ReminderEvent UnpackCsvLine(string csvLine)
     {
-        string[] data = csvLine.Split();
+        string[] data = csvLine.Split(',');
 
         var eventDateTime = DateTime.Parse(data[0]);
         string reminderText = data[1];
