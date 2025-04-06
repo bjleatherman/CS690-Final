@@ -7,20 +7,10 @@ class Program
 {
     static void Main(string[] args)
     {
-        string baseDir = AppContext.BaseDirectory;
-        string dataFolder = "data";
-        string dataFolderPath = Path.Combine(baseDir, dataFolder);
-        
-        string refuelFileName = "refuel-file.txt";
-        string maintenanceFileName = "maintenance-file.txt";
-        string reminderFileName = "reminder-file.txt";
-
-        if (!Directory.Exists(dataFolderPath)) { Directory.CreateDirectory(dataFolderPath); }
-        
-        string refuelFilePath = Path.Combine(dataFolderPath, refuelFileName);
-        string maintenanceFilePath = Path.Combine(dataFolderPath, maintenanceFileName);
-        string reminderFilePath = Path.Combine(dataFolderPath, reminderFileName);
-
+        FileManager.CreateDataDirectory();   
+        string refuelFilePath = FileManager.GetFullFileName("refuel-file.txt");
+        string maintenanceFilePath = FileManager.GetFullFileName("maintenance-file.txt");
+        string reminderFilePath = FileManager.GetFullFileName("reminder-file.txt");
 
         var dataManager = new DataManager(refuelFilePath, maintenanceFilePath, reminderFilePath);
         var menu = new MenuSystem(dataManager);
