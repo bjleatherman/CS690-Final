@@ -23,6 +23,8 @@ public class ConsoleUi
         var menuStack = new Stack<MenuItem>();
         MenuItem currentMenu = _rootMenu;
 
+        ShowReminders();
+
         while(true)
         {
             // Process current menu
@@ -84,5 +86,25 @@ public class ConsoleUi
      private void ExecuteCommand(MenuItem item)
     {
         item.Command?.Invoke();
+    }
+   
+
+    private void ShowReminders()
+    {
+        var alarms = _dataManager.GetOverDueReminders();
+
+        if (alarms.Count != 0) {
+
+            AnsiConsole.Clear();
+            AnsiConsole.Write(new Rule($"[red]REMINDERS: [/]").LeftJustified());
+            
+            foreach (var alarm in alarms)
+            {
+                AnsiConsole.Markup($"{alarm.ReminderText}");
+                Console.WriteLine();
+            }
+            
+            AnsiConsole.Confirm("Press Enter To Confirm");
+        }
     }
 }
