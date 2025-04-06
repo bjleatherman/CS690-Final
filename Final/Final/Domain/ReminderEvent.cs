@@ -13,7 +13,7 @@ public class ReminderEvent : Event
         ReminderTime = reminderTime;
 
         // Only set the alarm if the reminder time has not happened yet
-        IsSilenced = DateTime.Now < reminderTime;
+        IsSilenced = DateTime.Now >= reminderTime;
     }
     
     // Overload for event from file
@@ -46,5 +46,10 @@ public class ReminderEvent : Event
     public void TurnOffReminder()
     {
         IsSilenced = true;
+    }
+
+    public void ToggleReminder()
+    {
+        IsSilenced = !IsSilenced;
     }
 }

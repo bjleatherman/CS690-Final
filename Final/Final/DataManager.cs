@@ -101,6 +101,35 @@ public class DataManager
         DeleteEvent(MaintenanceEvents, id);
     }
 
+    public IEnumerable<MaintenanceEvent> GetMaintenanceEvents()
+    {
+        return MaintenanceEvents.OrderByDescending(e => e.EventDateTime);
+    }
+
+    public void EditMaintenanceEvent(Guid id, DateTime? eventDateTime=null, string? maintenanceType=null, double? cost=null, double? odometer=null)
+    {
+        var maintenanceEvent = MaintenanceEvents.FirstOrDefault(i => i.Id == id) ?? null;
+
+        if (maintenanceEvent != null){
+            var newMaintenanceEvent = new MaintenanceEvent(
+                eventDateTime: eventDateTime??maintenanceEvent.EventDateTime,
+                maintenanceType: maintenanceType??maintenanceEvent.MaintenanceType,
+                odometer: odometer??maintenanceEvent.Odometer,
+                cost: cost??maintenanceEvent.Cost,
+                id: id
+            );
+            DeleteMaintenanceEvent(id);
+            AddMaintenanceEvent(newMaintenanceEvent);
+        }
+    }
+
+    public MaintenanceEvent GetMaintenanceEventById(Guid id)
+    {
+        var maintenanceEvent = (MaintenanceEvents.FirstOrDefault(i => i.Id == id) ?? null) 
+            ?? throw new Exception($"Could not find maintenance event with Guid: {id}");
+        return maintenanceEvent;
+    }
+
     // Reminder Events
     public void AddReminderEvent(ReminderEvent reminderEvent)
     {
@@ -112,17 +141,52 @@ public class DataManager
         DeleteEvent(ReminderEvents, id);
     }
 
+    
+
+    public IEnumerable<ReminderEvent> GetReminderEvents()
+    {
+        return ReminderEvents.OrderByDescending(e => e.ReminderTime);
+    }
+
+    public void EditReminderEvent(Guid id, DateTime? eventDateTime=null, string? reminderText=null, DateTime? reminderTime=null, bool? isSilenced=null)
+    {
+        var reminderEvent = ReminderEvents.FirstOrDefault(i => i.Id == id) ?? null;
+
+        if (reminderEvent != null){
+            var newReminderEvent = new ReminderEvent(
+                eventDateTime: eventDateTime??reminderEvent.EventDateTime,
+                reminderText: reminderText??reminderEvent.ReminderText,
+                reminderTime: reminderTime??reminderEvent.ReminderTime,
+                isSilenced: isSilenced??reminderEvent.IsSilenced,
+                id: id
+            );
+            DeleteReminderEvent(id);
+            AddReminderEvent(newReminderEvent);
+        }
+    }
+
+    public ReminderEvent GetReminderEventById(Guid id)
+    {
+        var reminderEvent = (ReminderEvents.FirstOrDefault(i => i.Id == id) ?? null) 
+            ?? throw new Exception($"Could not find reminder event with Guid: {id}");
+        return reminderEvent;
+    }
+
     public void TurnOffReminderAlarm(Guid id)
     {
-        var targetEvent = ReminderEvents.FirstOrDefault(e => e.Id == id) ?? null;
-        if(targetEvent != null)
-        {
-            targetEvent.TurnOffReminder();
-            SynchronizeData();
-        } 
-        else
-        {
-            throw new Exception($"Could not find Guid: {Convert.ToString(id)} in Reminder Events.");
-        }
+        var targetEvent = (ReminderEvents.FirstOrDefault(e => e.Id == id) ?? null)
+            ?? throw new Exception($"Could not find reminder event with Guid: {id}");
+        
+        targetEvent.TurnOffReminder();
+        SynchronizeData();
+    }
+
+    public void ToggleReminderAlarm(Guid id)
+    {
+        var targetEvent = (ReminderEvents.FirstOrDefault(e => e.Id == id) ?? null)
+            ?? throw new Exception($"Could not find reminder event with Guid: {id}");
+        
+        targetEvent.ToggleReminder();
+        SynchronizeData();
     }
 }
