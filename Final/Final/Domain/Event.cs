@@ -9,7 +9,7 @@ public class Event : ICsvSerializable
     public Event()
     {
         EventDateTime = DateTime.Now;
-        Id = new Guid();
+        Id = Guid.NewGuid();
     }
 
     // Overload for events added from files
@@ -19,7 +19,7 @@ public class Event : ICsvSerializable
         Id = id;
     }
 
-    public string PackToCsv()
+     public virtual string PackToCsv()
     {
         return string.Join(',', Convert.ToString(EventDateTime), Convert.ToString(Id));
     }

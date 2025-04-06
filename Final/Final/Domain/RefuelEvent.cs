@@ -9,7 +9,6 @@ public class RefuelEvent : MaintenanceEvent
         : base("Refuel", odometer, cost)
     {
         this.FuelAdded = fuelAdded;
-
     }
 
     // Overload for event from file
@@ -19,12 +18,8 @@ public class RefuelEvent : MaintenanceEvent
         FuelAdded = fuelAdded;
     }
     
-    public new string PackToCsv()
+    public override string PackToCsv()
     {
-        Console.WriteLine($"Fuel Added: {FuelAdded}");
-        Console.WriteLine($"Odometer: {Odometer}");
-        Console.WriteLine($"Cost: {Cost}");
-
         return string.Join(',', 
         Convert.ToString(EventDateTime), 
         Convert.ToString(FuelAdded), 

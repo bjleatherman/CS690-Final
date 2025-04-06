@@ -25,7 +25,7 @@ public class ReminderEvent : Event
         IsSilenced = isSilenced;
     }
 
-    public new string PackToCsv()
+    public override string PackToCsv()
     {
         return string.Join(',', EventDateTime, ReminderText, ReminderTime, IsSilenced, Id);
     }

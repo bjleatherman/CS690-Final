@@ -1,5 +1,6 @@
 namespace Final;
 
+using System.Net.Http.Headers;
 using Final.Domain;
 
 public class DataManager
@@ -62,7 +63,31 @@ public class DataManager
 
     public IEnumerable<RefuelEvent> GetRefuelEvents()
     {
-        return RefuelEvents.AsReadOnly();
+        return RefuelEvents.OrderByDescending(e => e.EventDateTime);
+    }
+
+    public void EditRefuelEvent(Guid id, DateTime? eventDateTime=null, double? fuelAdded=null, double? cost=null, double? odometer=null)
+    {
+        var fuelEvent = RefuelEvents.FirstOrDefault(i => i.Id == id) ?? null;
+
+        if (fuelEvent != null){
+            var newRefuelEvent = new RefuelEvent(
+                eventDateTime??fuelEvent.EventDateTime,
+                fuelAdded??fuelEvent.FuelAdded,
+                odometer??fuelEvent.Odometer,
+                cost??fuelEvent.Cost,
+                id
+            );
+            DeleteRefuelEvent(id);
+            AddRefuelEvent(newRefuelEvent);
+        }
+    }
+
+    public RefuelEvent GetRefuelEventById(Guid id)
+    {
+        var refuelEvent = (RefuelEvents.FirstOrDefault(i => i.Id == id) ?? null) 
+            ?? throw new Exception($"Could not find refuel event with Guid: {id}");
+        return refuelEvent;
     }
 
     // Maintenance Events

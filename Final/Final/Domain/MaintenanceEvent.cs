@@ -23,7 +23,7 @@ public class MaintenanceEvent : Event
         Cost = cost;
     }
 
-    public new string PackToCsv()
+    public override string PackToCsv()
     {
         return string.Join(',', EventDateTime, MaintenanceType, Odometer, Cost, Id);
     }
