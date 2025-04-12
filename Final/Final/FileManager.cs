@@ -52,6 +52,11 @@ public class FileManager
         if (!Directory.Exists(_dataFolderPath)) { Directory.CreateDirectory(_dataFolderPath); }
     }
 
+    public static string GetDataDirectoryPath()
+    {
+        return _dataFolderPath;
+    }
+
     public static string GetFullFileName(string fileName)
     {
         return Path.Combine(_dataFolderPath, fileName);
